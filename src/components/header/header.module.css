@@ -1,0 +1,70 @@
+.container{
+    width: 100%;
+    height: 90px;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+}
+
+.logoGroup{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.message{
+    font-size: 14px;
+    color: #003EA1;
+    font-weight: 700;
+}
+
+.ultilsMenu{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 5px;
+}
+
+.home{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 8px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.home:hover{
+    background-color: #E0ECFF;
+}
+
+.textHome{
+    font-size: 14px;
+    color: #003EA1;
+    font-weight: 700;
+}
+
+.account{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+
+.account:hover{
+    background-color: #E0ECFF;
+}
+
+.textAccount{
+    font-size: 14px;
+    color: #808089;
+    font-weight: 700;
+    padding: 8px;
+}

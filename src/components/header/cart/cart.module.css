@@ -1,0 +1,14 @@
+.cartContainer{
+    padding: 0 10px;
+    padding-left: 25px;
+    border-left: 1px solid #DDDDE3;
+    cursor: pointer;
+}
+.cartIcon{
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.cartIcon:hover{
+    background-color: #CEE1FF;
+}
