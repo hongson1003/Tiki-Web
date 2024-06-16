@@ -1,12 +1,11 @@
-import NextAuth, { Awaitable } from "next-auth";
+import NextAuth from "next-auth";
 
-import GithubProvider from "next-auth/providers/github";
-import { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
 import { findOrCreateUser, getRoleByKey, login } from "@/lib/data";
 import { User } from "@/types/next-auth";
-import { toast } from "@/customize/mui/toast";
+import { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NO_SECRET,
@@ -18,7 +17,8 @@ export const authOptions: NextAuthOptions = {
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_SECRET!
+      clientSecret: process.env.GOOGLE_SECRET!,
+      authorization: { params: { access_type: "offline" } },
     }),
     CredentialsProvider({
       name: "Credentials",
@@ -30,7 +30,6 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.username || !credentials?.password){
           return null;
         }
-
         const user: User = {
           username: credentials.username,
           password: credentials.password,
@@ -38,7 +37,7 @@ export const authOptions: NextAuthOptions = {
         };
 
         const res = await login(user.username!, user.password!);
-        if (res.errCode === 0) {
+        if (res.errCode === 200) {
           return res.data as null;
         } else {
           return null;
@@ -55,42 +54,52 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token, user }) {
       session.user = token.user as User;
+      delete session.user.password;
       return session;
     },
     async jwt({ token, user, account, profile, trigger }) {
-      const myUser: User = Object.keys(token.user || {}).length > 0 ? token.user : user;
-      if (trigger === 'signIn' && account?.provider === 'github' || account?.provider === 'google') {
-        const role = await getRoleByKey('USER');
-        myUser.role = {
-          name: role?.name,
-          key: role?.key
+    if (trigger === 'signIn' && account?.provider === 'github' || account?.provider === 'google') {
+        if (account){
+          const myUser: User = {};
+          const role = await getRoleByKey('USER');
+          myUser.role = String(role?._id);
+          switch (account.provider) {
+            case 'github':
+              myUser.username = user?.name!;
+              myUser.name = user?.name!;
+              myUser.email = user?.email!;
+              myUser.type = account.provider.toUpperCase();
+              break;
+            case 'google':
+              myUser.username = user?.email!;
+              myUser.name = user?.name!;
+              myUser.email = user?.email!;
+              myUser.type = account.provider.toUpperCase();
+              break;
+          }
+          myUser.image = user?.image!;
+          const res = await findOrCreateUser(myUser);
+          if (res.data){
+            token.user = res.data;
+            token.access_token = account?.access_token!;
+            token.refresh_token = account?.refresh_token!;
+            token.expires_at = account?.expires_at!;
+            return token;
+          }else throw new Error('Có lỗi xảy ra')
         }
-        switch(account.provider) {
-          case 'github':
-            myUser.type = 'github';
-            myUser.username = user?.name!;
-            break;
-          case 'google':
-            myUser.type = 'google';
-            myUser.username = user?.email!;
-            break;
-        }
-        await findOrCreateUser(user);
-      }else if (trigger === 'signIn' && account?.provider === 'credentials') {
-        const role = await getRoleByKey('USER');
-        myUser.role = {
-          name: role?.name,
-          key: role?.key
-        }
-        myUser.type = 'credentials';
+      }else if (trigger === 'signIn' && account?.provider === 'credentials'){
+        token.user = user;
       }
-      token.user = myUser;
       return token;
-    },
+    }
+  },
+  session: {
+    strategy: 'jwt',
+    maxAge: 60 * 60,
   },
   pages: {
-    signIn: '/auth/signin',
-    signOut: '/auth/signout',
+    signIn: '/auth/signIn',
+    signOut: '/auth/signOut',
     error: '/auth/error',
     verifyRequest: '/auth/verify-request',
     newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)

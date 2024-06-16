@@ -57,6 +57,7 @@ export default function SignUpModal({
         type: 'CREDENTIALS',
         role: 'USER',
       })
+      console.log('data', data)
       if (data) toast.success('Đăng ký thành công')
       else toast.error('Tài khoản đã tồn tại')
       handleClose()

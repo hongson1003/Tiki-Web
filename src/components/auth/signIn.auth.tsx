@@ -49,7 +49,9 @@ export default function SignIn() {
         reRenderHeader()
         router.push('/')
       } else {
-        toast.error('Đăng nhập thất bại')
+        toast.error(
+          'Đăng nhập thất bại, vui lòng kiểm tra lại thông tin đăng nhập'
+        )
       }
     } catch (error) {
       console.log(error)

@@ -1,11 +1,25 @@
 .container{
     width: 100%;
-    height: 90px;
     background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.mainTop{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 5px 10px;
+    width: 100%;
+}
+.mainBottom{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    height: 40px;
+    background-color: #FFE880;
+    padding: 10px;
 }
 
 .logoGroup{

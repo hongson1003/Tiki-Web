@@ -1,6 +1,6 @@
 .cartContainer{
     padding: 0 10px;
-    padding-left: 25px;
+    margin-left: 10px;
     border-left: 1px solid #DDDDE3;
     cursor: pointer;
 }

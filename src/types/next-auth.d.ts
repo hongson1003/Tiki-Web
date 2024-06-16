@@ -2,13 +2,13 @@ import NextAuth, { DefaultSession } from "next-auth"
 import { DefaultJWT, JWT } from "next-auth/jwt"
 
 export type Role = {
-  id?: string;
+  _id?: string;
   key?: string;
   name?: string;
 }
 
 export interface User {
-  id?: string ;
+  _id?: string;
   name?: string | null
   email?: string | null
   image?: string | null
@@ -22,7 +22,10 @@ declare module "next-auth/jwt" {
   /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
   interface JWT {
     /** OpenID ID Token */
-    user: User & DefaultJWT["user"]
+    user: User & DefaultJWT["user"];
+    access_token: string;
+    expires_at: number;
+    refresh_token: string;
   }
 }
 

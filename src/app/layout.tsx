@@ -1,11 +1,12 @@
+// RootLayout.js
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
 import styles from './layout.module.css'
 import SessionWrapper from '@/lib/sessionWrapper'
 import ThemeRegistry from '@/config/ThemeRegistry'
 import NextProgressBarWrapper from '@/config/NextProgressBar'
 import ToastContainer from '@/customize/mui/toast'
+import WrapperAuthen from '@/customize/hook/wrapper.auth'
 
 export const metadata: Metadata = {
   title: 'Tiki - Đặt hàng online, giao nhanh, giá rẻ',
@@ -20,18 +21,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ThemeRegistry>
-        <body>
+      <body>
+        <ThemeRegistry>
           <div className={styles.container}>
             <NextProgressBarWrapper>
               <SessionWrapper>
-                {children}
+                <WrapperAuthen>{children}</WrapperAuthen>
                 <ToastContainer />
               </SessionWrapper>
             </NextProgressBarWrapper>
           </div>
-        </body>
-      </ThemeRegistry>
+        </ThemeRegistry>
+      </body>
     </html>
   )
 }

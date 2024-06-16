@@ -15,8 +15,12 @@ export const signUpAction = async (values: SignUpAction) => {
     try {
         values.password = await hashPassword(values.password);
         const res : ResponseApi<User> = await findOrCreateUser(values);
-        if (res.errCode === 0) {
-            return res.data;
+        if (res.errCode !== 500) {
+            if (res.errCode === 409) {
+                return null;
+            }else {
+                return res.data;
+            }
         }
         return null;
     } catch (error) {

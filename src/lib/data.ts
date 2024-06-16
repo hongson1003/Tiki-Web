@@ -1,4 +1,3 @@
-// utils/api.ts
 import { User as UserType } from "@/types/next-auth";
 import { Role, User } from "./models";
 import { comparePassword, connectMongo } from "./ultils";
@@ -13,22 +12,24 @@ export const findOrCreateUser = async (user?: UserType): Promise<ResponseApi<Use
 
     if (myUser) {
       return {
-        errCode: 0,
+        errCode: 409,
         message: 'User already exists',
         data: JSON.parse(JSON.stringify(myUser)) as UserType
       };
     }
     const newUser = new User(user);
     await newUser.save();
+    const role = await Role.findById(newUser.role);
+    newUser.role = role;
     return {
-      errCode: 0,
+      errCode: 201,
       message: 'Create user successfully',
       data: JSON.parse(JSON.stringify(newUser)) as UserType
     };
   } catch (error) {
     console.error(error);
     return {
-      errCode: -1,
+      errCode: 500,
       message: 'Error from server',
       data: null
     };
@@ -67,10 +68,10 @@ export const getUsers = async (): Promise<ResponseApi<UserType[]>> => {
 export const login = async (username: string, password: string): Promise<ResponseApi<UserType>> => {
   try {
     await connectMongo();
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ username, type: 'CREDENTIALS' });
     if (!user) {
       return {
-        errCode: -1,
+        errCode: 404,
         message: 'User not found',
         data: null
       };
@@ -78,19 +79,20 @@ export const login = async (username: string, password: string): Promise<Respons
     const isMatch = comparePassword(password, user.password);
     if (!isMatch) {
       return {
-        errCode: -1,
+        errCode: 401,
         message: 'Password is incorrect',
         data: null
       };
     }
+    delete user.password;
     return {
-      errCode: 0,
+      errCode: 200,
       message: 'Logged in successfully',
       data: JSON.parse(JSON.stringify(user)) as UserType
     };
   } catch (error) {
     return {
-      errCode: -1,
+      errCode: 500,
       message: 'Error from server',
       data: null
     };

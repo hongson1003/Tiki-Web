@@ -79,7 +79,11 @@ const AccountPopover = ({ children }: { children: React.ReactNode }) => {
         onClose={handleClose}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'left',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'center',
+          horizontal: 'right',
         }}
       >
         <ContentPopover handleClose={handleClose} />
