@@ -1,6 +1,6 @@
-import {Role} from './models';
+import {Role} from '../models';
 
-const roleSeeder = [
+const roles = [
     {
         name: 'admin',
         key: 'ADMIN',
@@ -16,9 +16,9 @@ const roleSeeder = [
 // persist data to database
 
 
-export const seedRoles = async () => {
+export const roleSeeders = async () => {
     try {
-        await Role.insertMany(roleSeeder);
+        await Role.insertMany(roles);
     } catch (error) {
         if (error instanceof Error) {
             console.error(error.message)

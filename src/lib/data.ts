@@ -1,6 +1,8 @@
 import { User as UserType } from "@/types/next-auth";
-import { Role, User } from "./models";
+import { Category, Role, Strategy, User } from "@/lib/models";
 import { comparePassword, connectMongo } from "./ultils";
+import { CategoryModel } from "@/models/category";
+import { StrategyModel } from "@/models/strategy";
 
 export const findOrCreateUser = async (user?: UserType): Promise<ResponseApi<UserType>> => {
   try {
@@ -91,6 +93,62 @@ export const login = async (username: string, password: string): Promise<Respons
       data: JSON.parse(JSON.stringify(user)) as UserType
     };
   } catch (error) {
+    return {
+      errCode: 500,
+      message: 'Error from server',
+      data: null
+    };
+  }
+}
+
+export const getCategoriesLoader = async (imit: number): Promise<ResponseApi<{categories: CategoryModel[], total: number}>> => {
+  try {
+    await connectMongo();
+    const categories = await Category.find().limit(imit);
+    const total = await Category.countDocuments();
+    return {
+      errCode: 200,
+      message: 'Fetched categories successfully',
+      data: {
+        categories: JSON.parse(JSON.stringify(categories)) as CategoryModel[],
+        total
+      }
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      errCode: 500,
+      message: 'Error from server',
+      data: null
+    };
+  }
+}
+
+export const getStrategies = async (): Promise<ResponseApi<StrategyModel[]>> => {
+  try {
+    await connectMongo();
+    const strategies = await Strategy.find({
+      startDate: {
+        $lte: new Date()
+      },
+      endDate: {
+        $gte: new Date()
+      }
+    });
+    if (!strategies) {
+      return {
+        errCode: 404,
+        message: 'Strategies not found',
+        data: null
+      };
+    }
+    return {
+      errCode: 200,
+      message: 'Fetched strategies successfully',
+      data: JSON.parse(JSON.stringify(strategies))
+    };
+  } catch (error) {
+    console.error(error);
     return {
       errCode: 500,
       message: 'Error from server',

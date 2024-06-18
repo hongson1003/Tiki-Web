@@ -1,7 +1,6 @@
 import Header from '@/components/header/header.component'
 import type { Metadata } from 'next'
 import Footer from '@/components/footer/footer.component'
-import { Box } from '@mui/material'
 
 export const metadata: Metadata = {
   title: 'Tiki - Đặt hàng online, giao nhanh, giá rẻ',
@@ -18,7 +17,7 @@ export default function RootLayout({
     <>
       <Header />
       {children}
-      <Footer />
+      {/* <Footer /> */}
     </>
   )
 }

@@ -59,6 +59,7 @@ const AccountPopover = ({ children }: { children: React.ReactNode }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null)
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation()
     setAnchorEl(event.currentTarget)
   }
 

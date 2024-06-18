@@ -1,8 +1,6 @@
-import { Box, Typography } from '@mui/material'
-import React from 'react'
-import Image from 'next/image'
+import { Category } from "../models"; 
 
-export const menu = [
+const categories = [
   {
     title: 'Nhà sách Tiki',
     icon: '/images/homePage/categories/book.png',
@@ -103,56 +101,15 @@ export const menu = [
     icon: '/images/homePage/categories/balo-tui-xach-vi.png',
     alt: 'icon balo - túi xách - ví',
   },
-]
+];
 
-const Sidebar = () => {
-  return (
-    <Box
-      sx={{
-        borderRadius: '10px',
-        backgroundColor: 'var(--white)',
-        padding: '15px',
-      }}
-    >
-      <Typography
-        component="p"
-        sx={{
-          padding: ' 5px 10px',
-          fontWeight: 'bold',
-        }}
-      >
-        Danh mục
-      </Typography>
-      <Box>
-        {menu.map((item, index) => (
-          <Box
-            key={index}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              padding: '10px',
-              borderBottom: '1px solid #f0f0f0',
-              ':hover': {
-                backgroundColor: 'var(--light--gray)',
-                cursor: 'pointer',
-                borderRadius: '10px',
-              },
-            }}
-          >
-            <Image src={item.icon} alt={item.alt} width={28} height={28} />
-            <Typography
-              component="p"
-              sx={{
-                marginLeft: '10px',
-              }}
-            >
-              {item.title}
-            </Typography>
-          </Box>
-        ))}
-      </Box>
-    </Box>
-  )
+export const categorySeeders = async () => {
+    try {
+        await Category.insertMany(categories);
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error(error.message)
+        }
+    }
 }
 
-export default Sidebar

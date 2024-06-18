@@ -1,4 +1,5 @@
-import Sidebar from '@/components/homePage/sidebar/sidebar'
+import MainHome from '@/components/homePage/main.home'
+import Sidebar from '@/components/homePage/sidebar'
 import { Box } from '@mui/material'
 
 export default function Home() {
@@ -6,15 +7,14 @@ export default function Home() {
     <Box
       sx={{
         width: '100%',
-        flex: 1,
         display: 'flex',
-        gap: '10px',
+        gap: '1.25rem',
         backgroundColor: 'var(--whisper)',
-        padding: '15px 20px',
+        padding: '15px',
       }}
     >
       <Sidebar />
-      <span>Home</span>
+      <MainHome />
     </Box>
   )
 }

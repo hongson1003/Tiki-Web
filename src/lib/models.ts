@@ -1,20 +1,8 @@
+import { RoleModel } from "@/models/role";
+import { UserModel } from "@/models/user";
 import mongoose, { Schema, mongo } from "mongoose";
-import { seedRoles } from "./seeders";
 
-export interface RoleModel{
-    name: string;
-    key: string;
-}
 
-export interface UserModel{
-    name?: string;
-    username?: string;
-    password?: string;
-    phoneNumber?: string;
-    image?: string;
-    role?: string;
-    type: string;
-}
 
 const roleSchema: Schema<RoleModel> = new mongoose.Schema({
     name: String,
@@ -46,5 +34,54 @@ const userSchema: Schema<UserModel> = new mongoose.Schema({
 
 export const User = mongoose.models.User || mongoose.model("User", userSchema);
 
+const categorySchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true,
+    },
+    icon: {
+        type: String,
+        required: true,
+    },
+    alt: {
+        type: String,
+        required: true,
+    },
+})
 
+export const Category = mongoose.models.Category || mongoose.model("Category", categorySchema);
 
+const StrategySchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+    description: {
+        type: String,
+        required: true,
+    },
+    image: {
+        type: String,
+        required: true,
+    },
+    startDate: {
+        type: Date,
+        required: true,
+    },
+    endDate: {
+        type: Date,
+        required: true,
+    },
+    categories: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Category",
+        },
+    ],
+    discount: {
+        type: Number,
+        required: true,
+    },
+})
+
+export const Strategy = mongoose.models.Strategy || mongoose.model("Strategy", StrategySchema);

@@ -7,6 +7,7 @@ import ThemeRegistry from '@/config/ThemeRegistry'
 import NextProgressBarWrapper from '@/config/NextProgressBar'
 import ToastContainer from '@/customize/mui/toast'
 import WrapperAuthen from '@/customize/hook/wrapper.auth'
+import WrapperQueryClient from '@/customize/hook/wrapper.queryClient'
 
 export const metadata: Metadata = {
   title: 'Tiki - Đặt hàng online, giao nhanh, giá rẻ',
@@ -26,8 +27,10 @@ export default function RootLayout({
           <div className={styles.container}>
             <NextProgressBarWrapper>
               <SessionWrapper>
-                <WrapperAuthen>{children}</WrapperAuthen>
-                <ToastContainer />
+                <WrapperQueryClient>
+                  <WrapperAuthen>{children}</WrapperAuthen>
+                  <ToastContainer />
+                </WrapperQueryClient>
               </SessionWrapper>
             </NextProgressBarWrapper>
           </div>

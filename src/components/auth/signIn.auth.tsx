@@ -23,7 +23,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import { toast } from '@/customize/mui/toast'
 import { revalidatePath } from 'next/cache'
-import { reRenderHeader } from '@/action/action'
+import { reRenderHeaderAction } from '@/action/action'
 
 interface SignInProps {
   username: string
@@ -46,7 +46,7 @@ export default function SignIn() {
       })
 
       if (result?.ok) {
-        reRenderHeader()
+        reRenderHeaderAction()
         router.push('/')
       } else {
         toast.error(

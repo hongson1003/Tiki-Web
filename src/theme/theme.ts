@@ -25,5 +25,10 @@ export const theme = createTheme({
         disableScrollLock: true,
       },
     },
+    MuiPopover: {
+      defaultProps: {
+        disableScrollLock: true,
+      },
+    }
   },
 });
